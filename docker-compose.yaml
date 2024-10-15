@@ -1,0 +1,43 @@
+
+services:
+  
+    http:
+      image: nginx:latest
+      container_name: http_compose
+      ports:
+        - "8081:80"
+      volumes:
+        - ./nginx/default.conf:/etc/nginx/conf.d/default.conf # Bind your NGINX config
+      depends_on:
+        - script
+      networks:
+        - tp2_network
+  
+    script:
+      build:
+        context: .
+        dockerfile: Dockerfile.script  # va chercher bonheur sur wordpress.org
+      # image: bitnami/php-fpm:latest
+      container_name: script_compose
+      # volumes:
+      #   - ./wordpress:/app/wordpress 
+      networks:
+        - tp2_network
+  
+    data:
+      image: mariadb:latest
+      container_name: data_compose
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: mydb
+      volumes:
+        - db_data:/var/lib/mysql
+      networks:
+        - tp2_network
+
+networks:
+  tp2_network:
+    driver: bridge 
+
+volumes:
+  db_data:

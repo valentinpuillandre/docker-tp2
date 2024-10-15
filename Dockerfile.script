@@ -1,0 +1,17 @@
+FROM bitnami/php-fpm:latest
+
+# Install necessary packages
+RUN apt-get update && \
+    apt-get install -y wget unzip && \
+    rm -rf /var/lib/apt/lists/*
+
+# Download and unzip WordPress
+RUN wget https://wordpress.org/latest.tar.gz && \
+    tar -xvzf latest.tar.gz && \
+    # mv wordpress /app && \
+    rm latest.tar.gz
+
+# RUN curl -O https://wordpress.org/download/latest.tar.gz \
+#     tar -xzvf latest.tar.gz \
+#     mv wordpress/* /path/to/your/local/app \
+#     rm latest.tar.gz
